@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import CourseListRow from './CourseListRow';
 
-const CourseList = ({courses, deleteCourse}) => {
+const CourseList = ({courses/*, deleteCourse*/}) => {
     return (
-        <table>
+        <table className="table">
             <thead>
                 <tr>
                     <th>&nbsp;</th>
@@ -23,8 +23,8 @@ const CourseList = ({courses, deleteCourse}) => {
 };
 
 CourseList.propTypes = {
-    courses: PropTypes.array.isRequired,
-    deleteCourse: PropTypes.func.isRequired
+    courses: PropTypes.array.isRequired/*,
+    deleteCourse: PropTypes.func.isRequired*/
 };
 
 export default CourseList;
