@@ -19,20 +19,29 @@ class UpdateCoursePage extends Component {
             <CourseForm
                 course={this.state.course}
                 errors={this.state.errors}
-                allAuthors={[]} />
+                allAuthors={this.props.authors} />
         );
     }
 }
 
 UpdateCoursePage.propTypes = {
-    course: PropTypes.object.isRequired
-    //errors: PropTypes.arrayOf(PropTypes.string)
+    course: PropTypes.object.isRequired,
+    authors: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
 };
 
 const mapStateToProps = (state, ownProps) => {
     let course = { id: '', watchHref: '', title: '', authorId: '', length: '', category: '' };
+    const authorsFormattedForDropdown = state.authors.map(author => {
+        return {
+            value: author.id,
+            text: author.firstName + ' ' + author.lastName
+        };
+    });
 
-    return { course };
+    return {
+        course,
+        authors: authorsFormattedForDropdown
+    };
 };
 
 const mapDispatchToProps = (dispatch) => ({
