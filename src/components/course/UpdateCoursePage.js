@@ -12,11 +12,35 @@ class UpdateCoursePage extends Component {
             course: Object.assign({}, this.props.course),
             errors: {}
         };
+
+        this.saveCourse = this.saveCourse.bind(this);
+        this.updateCourseState = this.updateCourseState.bind(this);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (this.props.course.id !== nextProps.course.id) {
+            this.setState({ course: Object.assign({}, nextProps.course) });
+        }
+    }
+
+    updateCourseState(event) {
+        const field = event.target.name;
+        let course = this.state.course;
+        course[field] = event.target.value;
+        return this.setState({ course: course });
+    }
+
+    saveCourse(event) {
+        event.preventDefault();
+        this.props.actions.saveCourse(this.state.course);
+        this.context.router.push('/courses');
     }
 
     render() {
         return (
             <CourseForm
+                onSave={this.saveCourse}
+                onChange={this.updateCourseState}
                 course={this.state.course}
                 errors={this.state.errors}
                 allAuthors={this.props.authors} />
@@ -25,12 +49,30 @@ class UpdateCoursePage extends Component {
 }
 
 UpdateCoursePage.propTypes = {
+    actions: PropTypes.object.isRequired,
     course: PropTypes.object.isRequired,
     authors: PropTypes.arrayOf(PropTypes.object.isRequired).isRequired
 };
 
+UpdateCoursePage.contextTypes = {
+    router: PropTypes.object.isRequired
+};
+
+const getCourseById = (courses, id) => {
+    const course = courses.find(course => course.id === id);
+    if (course)
+        return course;
+    return null;
+};
+
 const mapStateToProps = (state, ownProps) => {
+    const courseId = ownProps.params.id;
     let course = { id: '', watchHref: '', title: '', authorId: '', length: '', category: '' };
+
+    if (courseId && state.courses.length > 0) {
+        course = getCourseById(state.courses, courseId);
+    }
+
     const authorsFormattedForDropdown = state.authors.map(author => {
         return {
             value: author.id,
