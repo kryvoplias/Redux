@@ -10,7 +10,8 @@ class UpdateCoursePage extends Component {
 
         this.state = {
             course: Object.assign({}, this.props.course),
-            errors: {}
+            errors: {},
+            saving: false
         };
 
         this.saveCourse = this.saveCourse.bind(this);
@@ -32,18 +33,25 @@ class UpdateCoursePage extends Component {
 
     saveCourse(event) {
         event.preventDefault();
-        this.props.actions.saveCourse(this.state.course);
+        this.setState({ saving: true });
+        this.props.actions.saveCourse(this.state.course).
+            then(() => this.redirect());
+    }
+
+    redirect() {
+        this.setState({ saving: false });
         this.context.router.push('/courses');
     }
 
     render() {
         return (
             <CourseForm
-                onSave={this.saveCourse}
-                onChange={this.updateCourseState}
+                allAuthors={this.props.authors}
                 course={this.state.course}
                 errors={this.state.errors}
-                allAuthors={this.props.authors} />
+                saving={this.state.saving}
+                onSave={this.saveCourse}
+                onChange={this.updateCourseState} />
         );
     }
 }
