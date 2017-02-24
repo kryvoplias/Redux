@@ -5,6 +5,8 @@ import * as courseActions from '../../actions/courseActions';
 import CourseForm from './CourseForm';
 import toastr from 'toastr';
 
+import {authorsFormattedForDropdown} from '../../selectors/selectors';
+
 export class UpdateCoursePage extends Component {
     constructor(props, context) {
         super(props, context);
@@ -87,7 +89,7 @@ UpdateCoursePage.propTypes = {
 };
 
 UpdateCoursePage.contextTypes = {
-    router: PropTypes.object.isRequired
+    router: PropTypes.object
 };
 
 const getCourseById = (courses, id) => {
@@ -105,16 +107,9 @@ const mapStateToProps = (state, ownProps) => {
         course = getCourseById(state.courses, courseId);
     }
 
-    const authorsFormattedForDropdown = state.authors.map(author => {
-        return {
-            value: author.id,
-            text: author.firstName + ' ' + author.lastName
-        };
-    });
-
     return {
         course,
-        authors: authorsFormattedForDropdown
+        authors: authorsFormattedForDropdown(state.authors)
     };
 };
 
