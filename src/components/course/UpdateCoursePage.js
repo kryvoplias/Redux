@@ -5,7 +5,7 @@ import * as courseActions from '../../actions/courseActions';
 import CourseForm from './CourseForm';
 import toastr from 'toastr';
 
-class UpdateCoursePage extends Component {
+export class UpdateCoursePage extends Component {
     constructor(props, context) {
         super(props, context);
 
